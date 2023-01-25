@@ -1,4 +1,4 @@
-const myModal = new bootstrap.Modal("#register-modal");
+const myModal = new bootstrap.Modal("#transaction-modal");
 let logged = sessionStorage.getItem("logged");
 const session = localStorage.getItem("session");
 
@@ -15,12 +15,18 @@ document
   .addEventListener("submit", function (e) {
     e.preventDefault();
 
-    const value = parseFload(document.getElementById("value-input").value);
+    const value = parseFloat(document.getElementById("value-input").value);
     const description = document.getElementById("description-input").value;
     const date = document.getElementById("date-input").value;
     const type = document.querySelector(
       'input[name ="type-input"]:checked'
     ).value;
+    data.transactions.unshift({
+      value: value,
+      type: type,
+      description: description,
+      date: date,
+    });
 
     saveData(data);
     e.target.reset();
@@ -29,13 +35,6 @@ document
     getTransactions();
 
     alert("Lançamento adicionado com sucesso.");
-
-    data.transactions.unshift({
-      value: value,
-      type: type,
-      description: description,
-      date: date,
-    });
   });
 
 checkLogged();
@@ -70,7 +69,7 @@ function getTransactions() {
   let transactionsHtml = ``;
 
   if (transactions.length) {
-    transactions.array.forEach((item) => {
+    transactions.forEach((item) => {
       let type = "Entrada";
 
       if (item.type === "2") {
@@ -79,16 +78,14 @@ function getTransactions() {
       transactionsHtml += `
       <tr>
         <th scope="row">${item.date}</th>
-        <td>${item.vale.toFixed(2)}</td>
+        <td>${item.value.toFixed(2)}</td>
         <td>${type}</td>
         <td>${item.description}</td>
       </tr>`;
     });
   }
+  document.getElementById("transactions-list").innerHTML = transactionsHtml;
 }
-
-document.getElementById("transactions-list").innerHTML = transactionsHtml;
-
 function saveData(data) {
   localStorage.setItem(data.login, JSON.stringify(data));
 }
