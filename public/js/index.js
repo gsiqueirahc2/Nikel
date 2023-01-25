@@ -13,7 +13,7 @@ document.getElementById("login-form").addEventListener("submit", function (e) {
   const checkSession = document.getAnimations("session-input").checked;
 
   const account = getAccount(email);
-
+  console.log(email);
   if (!account) {
     alert("Ops verifique o usuário ou a senha.");
     return;
